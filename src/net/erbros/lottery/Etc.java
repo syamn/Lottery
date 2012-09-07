@@ -93,47 +93,20 @@ public class Etc {
         if (timeLeft >= 60 * 60 * 24) {
             final int days = (int) Math.floor(timeLeft / (60 * 60 * 24));
             timeLeft -= 60 * 60 * 24 * days;
-            if (mini) {
-                stringTimeLeft += Integer.toString(days) + "d ";
-            } else {
-                stringTimeLeft += Integer.toString(days) + " " + Etc.pluralWording("day", days) + ", ";
-            }
+            stringTimeLeft += Integer.toString(days) + "日 ";
         }
         if (timeLeft >= 60 * 60) {
             final int hours = (int) Math.floor(timeLeft / (60 * 60));
             timeLeft -= 60 * 60 * hours;
-            if (mini) {
-                stringTimeLeft += Integer.toString(hours) + "h ";
-            } else {
-                stringTimeLeft += Integer.toString(hours) + " " + Etc.pluralWording("hour", hours) + ", ";
-            }
+            stringTimeLeft += Integer.toString(hours) + "時 ";
         }
         if (timeLeft >= 60) {
             final int minutes = (int) Math.floor(timeLeft / (60));
             timeLeft -= 60 * minutes;
-            if (mini) {
-                stringTimeLeft += Integer.toString(minutes) + "m ";
-
-            } else {
-                stringTimeLeft += Integer.toString(minutes) + " " + Etc.pluralWording("minute", minutes) + ", ";
-            }
-        } else {
-            // Lets remove the last comma, since it will look bad with 2 days, 3
-            // hours, and 14 seconds.
-            if (stringTimeLeft.equalsIgnoreCase("") == false && !mini) {
-                stringTimeLeft = stringTimeLeft.substring(0,
-                        stringTimeLeft.length() - 1);
-            }
+            stringTimeLeft += Integer.toString(minutes) + "分 ";
         }
         final int secs = (int) timeLeft;
-        if (mini) {
-            stringTimeLeft += secs + "s";
-        } else {
-            if (!stringTimeLeft.equalsIgnoreCase("")) {
-                stringTimeLeft += "and ";
-            }
-            stringTimeLeft += Integer.toString(secs) + " " + Etc.pluralWording("second", secs);
-        }
+        stringTimeLeft += secs + "秒";
 
         return stringTimeLeft;
     }

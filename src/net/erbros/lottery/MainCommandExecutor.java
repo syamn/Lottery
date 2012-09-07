@@ -99,18 +99,18 @@ public class MainCommandExecutor implements CommandExecutor {
         lConfig.debugMsg("pot current total: " + amount);
         // Send some messages:
         player.sendMessage(ChatColor.GOLD + "[LOTTERY] "
-                + ChatColor.WHITE + "Draw in: " + ChatColor.RED
+                + ChatColor.WHITE + "抽選まで あと " + ChatColor.RED
                 + lGame.timeUntil(false));
         if (lConfig.useiConomy()) {
             player.sendMessage(ChatColor.GOLD + "[LOTTERY] "
-                    + ChatColor.WHITE + "Buy a ticket for "
+            		+ ChatColor.RED + "/lottery buy "
+                    + ChatColor.WHITE + "コマンドで "
                     + ChatColor.RED + plugin.Method.format(lConfig.getCost())
-                    + ChatColor.WHITE + " with " + ChatColor.RED
-                    + "/lottery buy");
+                    + ChatColor.WHITE + " 払い宝くじを購入できます");
             player.sendMessage(ChatColor.GOLD + "[LOTTERY] "
-                    + ChatColor.WHITE + "There is currently "
+                    + ChatColor.WHITE + "現在の賞金は "
                     + ChatColor.GREEN + plugin.Method.format(amount)
-                    + ChatColor.WHITE + " in the pot.");
+                    + ChatColor.WHITE + " です");
         } else {
             player.sendMessage(ChatColor.GOLD + "[LOTTERY] "
                     + ChatColor.WHITE + "Buy a ticket for "
@@ -126,10 +126,9 @@ public class MainCommandExecutor implements CommandExecutor {
         }
         if (lConfig.getMaxTicketsEachUser() > 1) {
             player.sendMessage(ChatColor.GOLD + "[LOTTERY] "
-                    + ChatColor.WHITE + "You got "
+                    + ChatColor.WHITE + "あなたは "
                     + ChatColor.RED + lGame.playerInList((Player) sender)
-                    + " " + ChatColor.WHITE + Etc.pluralWording("ticket",
-                    lGame.playerInList((Player) sender)));
+                    + " 枚の宝くじを買っています");
         }
         // Number of tickets available?
         if (lConfig.getTicketsAvailable() > 0) {
@@ -141,14 +140,14 @@ public class MainCommandExecutor implements CommandExecutor {
         }
         player.sendMessage(ChatColor.GOLD + "[LOTTERY] "
                 + ChatColor.RED + "/lottery help" + ChatColor.WHITE
-                + " for other commands");
+                + " コマンドで、他のコマンドを表示します");
         // Does lastwinner exist and != null? Show.
         // Show different things if we are using iConomy over
         // material.
         if (lConfig.getLastwinner() != null) {
             if (lConfig.useiConomy()) {
                 player.sendMessage(ChatColor.GOLD + "[LOTTERY] "
-                        + ChatColor.WHITE + "Last winner: "
+                        + ChatColor.WHITE + "前回の当選者: "
                         + lConfig.getLastwinner()
                         + " (" + plugin.Method.format(lConfig.getLastwinneramount()) + ")");
             } else {
@@ -171,15 +170,15 @@ public class MainCommandExecutor implements CommandExecutor {
 
     public void commandHelp(final CommandSender sender, final String[] args) {
         sender.sendMessage(ChatColor.GOLD + "[LOTTERY] "
-                + ChatColor.WHITE + "Help commands");
+                + ChatColor.WHITE + "コマンドリスト");
         sender.sendMessage(ChatColor.RED + "/lottery"
-                + ChatColor.WHITE + " : Basic lottery info.");
-        sender.sendMessage(ChatColor.RED + "/lottery buy <n>"
-                + ChatColor.WHITE + " : Buy ticket(s).");
-        sender.sendMessage(ChatColor.RED + "/lottery claim"
-                + ChatColor.WHITE + " : Claim outstandig wins.");
+                + ChatColor.WHITE + " : 宝くじ情報を確認します");
+        sender.sendMessage(ChatColor.RED + "/lottery buy <枚数>"
+                + ChatColor.WHITE + " : 宝くじを購入します");
+        //sender.sendMessage(ChatColor.RED + "/lottery claim"
+        //        + ChatColor.WHITE + " : Claim outstandig wins.");
         sender.sendMessage(ChatColor.RED + "/lottery winners"
-                + ChatColor.WHITE + " : Check last winners.");
+                + ChatColor.WHITE + " : 過去の当選者を確認します");
         // Are we dealing with admins?
         if (sender.hasPermission("lottery.admin.draw")) {
             sender.sendMessage(ChatColor.BLUE + "/lottery draw"
@@ -229,7 +228,7 @@ public class MainCommandExecutor implements CommandExecutor {
                 if (lGame.ticketsSold() >= lConfig.getTicketsAvailable()) {
                     player.sendMessage(ChatColor.GOLD
                             + "[LOTTERY] " + ChatColor.WHITE
-                            + "There are no more tickets available");
+                            + "宝くじは売り切れです！");
                     return;
                 } else {
                     buyTickets = lConfig.getTicketsAvailable() - lGame.ticketsSold();
@@ -238,7 +237,7 @@ public class MainCommandExecutor implements CommandExecutor {
         }
 
         if (lConfig.getMaxTicketsEachUser() > 0 && lGame.playerInList(player) + buyTickets > lConfig.getMaxTicketsEachUser()) {
-            player.sendMessage(ChatColor.GOLD + "[LOTTERY] " + ChatColor.WHITE + "You already have the maximum of " + lConfig.getMaxTicketsEachUser() + " " + Etc.pluralWording("ticket", lConfig.getMaxTicketsEachUser()) + " already.");
+            player.sendMessage(ChatColor.GOLD + "[LOTTERY] " + ChatColor.WHITE + "あなたは購入可能な " + lConfig.getMaxTicketsEachUser() + " 枚の宝くじを既に買っています");
             return;
         }
 
@@ -246,9 +245,9 @@ public class MainCommandExecutor implements CommandExecutor {
             // You got your ticket.
             if (lConfig.useiConomy()) {
                 player.sendMessage(ChatColor.GOLD + "[LOTTERY] " + ChatColor.WHITE
-                        + "You got " + buyTickets + " " + Etc.pluralWording("ticket", buyTickets)
-                        + " for " + ChatColor.RED
-                        + plugin.Method.format(lConfig.getCost() * buyTickets));
+                        + "あなたは" + buyTickets + "枚の宝くじを"
+                        + ChatColor.RED + plugin.Method.format(lConfig.getCost() * buyTickets)
+                        + ChatColor.WHITE + "で買いました！");
             } else {
                 player.sendMessage(ChatColor.GOLD + "[LOTTERY] " + ChatColor.WHITE
                         + "You got " + buyTickets + " " + Etc.pluralWording("ticket", buyTickets)
@@ -259,34 +258,19 @@ public class MainCommandExecutor implements CommandExecutor {
             // tickets have he bought now?
             if (lConfig.getMaxTicketsEachUser() > 1) {
                 player.sendMessage(ChatColor.GOLD + "[LOTTERY] " + ChatColor.WHITE
-                        + "You now have " + ChatColor.RED + lGame.playerInList(player)
-                        + " " + ChatColor.WHITE + Etc.pluralWording("ticket",
-                        lGame.playerInList(player)));
-            }
-            if (lConfig.isBuyingExtendDeadline() && lGame.timeUntil() < lConfig.getBuyingExtendRemaining()) {
-                final long timeBonus = (long) (lConfig.getBuyingExtendBase() + (lConfig.getBuyingExtendMultiplier() * Math.sqrt(buyTickets)));
-                lConfig.setNextexec(lConfig.getNextexec() + (timeBonus * 1000));
+                        + "あなたは " + ChatColor.RED + lGame.playerInList(player)
+                        + " " + ChatColor.WHITE + "枚の宝くじを買っています！");
             }
             if (lConfig.useBroadcastBuying()) {
-                if (lGame.timeUntil() < lConfig.getBroadcastBuyingTime()) {
-                    Bukkit.broadcastMessage(ChatColor.GOLD
-                            + "[LOTTERY] " + ChatColor.WHITE
-                            + player.getDisplayName() + ChatColor.WHITE
-                            + " just bought " + buyTickets + " "
-                            + Etc.pluralWording("ticket", buyTickets)
-                            + "! Draw in " + lGame.timeUntil(true));
-                } else {
-                    Bukkit.broadcastMessage(ChatColor.GOLD
-                            + "[LOTTERY] " + ChatColor.WHITE
-                            + player.getDisplayName() + ChatColor.WHITE
-                            + " just bought " + buyTickets + " "
-                            + Etc.pluralWording("ticket", buyTickets));
-                }
+                Bukkit.broadcastMessage(ChatColor.GOLD
+                        + "[LOTTERY] " + ChatColor.WHITE
+                        + player.getDisplayName() + ChatColor.WHITE
+                        + " が " + buyTickets + " 枚の宝くじを購入しました！");
             }
 
         } else {
             // Something went wrong.
-            player.sendMessage(ChatColor.GOLD + "[LOTTERY] " + ChatColor.WHITE + "You can't afford a ticket");
+            player.sendMessage(ChatColor.GOLD + "[LOTTERY] " + ChatColor.WHITE + "あなたは宝くじを買うことができません");
         }
     }
 

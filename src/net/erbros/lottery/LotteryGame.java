@@ -239,9 +239,9 @@ public class LotteryGame {
             plugin.startTimerSchedule(true);
             // And return some string to let the user know we are doing our best ;)
             if (mini) {
-                return "Soon";
+                return "まもなく";
             }
-            return "Draw will occur soon!";
+            return "まもなく抽選が行われます！";
 
         }
 
@@ -252,9 +252,8 @@ public class LotteryGame {
         final ArrayList<String> players = playersInFile("lotteryPlayers.txt");
 
         if (players.isEmpty()) {
-            Bukkit.broadcastMessage(ChatColor.GOLD + "[LOTTERY] "
-                    + ChatColor.WHITE
-                    + "No tickets sold this round. Thats a shame.");
+            //Bukkit.broadcastMessage(ChatColor.GOLD + "[LOTTERY] "+ ChatColor.WHITE + "No tickets sold this round. Thats a shame.");
+        	System.out.println("[LOTTERY] No tickets sold this round!");
             return false;
         } else {
             // Find rand. Do minus 1 since its a zero based array.
@@ -301,9 +300,10 @@ public class LotteryGame {
                 account.add(amount);
                 // Announce the winner:
                 Bukkit.broadcastMessage(ChatColor.GOLD + "[LOTTERY] "
-                        + ChatColor.WHITE + "Congratulations to "
-                        + players.get(rand) + " for winning " + ChatColor.RED
-                        + plugin.Method.format(amount) + ".");
+                        + ChatColor.WHITE + "おめでとうございます！ "
+                        + players.get(rand) + " が賞金 " + ChatColor.RED
+                        + plugin.Method.format(amount) + ChatColor.WHITE
+                        + " を獲得しました！");
                 addToWinnerList(players.get(rand), amount, 0);
             } else {
                 // let's throw it to an int.
@@ -324,11 +324,8 @@ public class LotteryGame {
             Bukkit.broadcastMessage(ChatColor.GOLD
                     + "[LOTTERY] "
                     + ChatColor.WHITE
-                    + "There was in total "
-                    + Etc.realPlayersFromList(players).size()
-                    + " "
-                    + Etc.pluralWording("player", Etc.realPlayersFromList(players).size()) + " buying " + players.size() + " "
-                    + Etc.pluralWording("ticket", players.size()));
+                    + "今回は " + Etc.realPlayersFromList(players).size()
+                    + " 人が合計で " + players.size() + " 枚を購入しました！");
 
             // Add last winner to config.
             lConfig.setLastwinner(players.get(rand));

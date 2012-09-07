@@ -100,7 +100,7 @@ public class MainCommandExecutor implements CommandExecutor {
         // Send some messages:
         player.sendMessage(ChatColor.GOLD + "[LOTTERY] "
                 + ChatColor.WHITE + "抽選まで あと " + ChatColor.RED
-                + lGame.timeUntil(false));
+                + lGame.timeUntil(false) + ChatColor.WHITE + " です");
         if (lConfig.useiConomy()) {
             player.sendMessage(ChatColor.GOLD + "[LOTTERY] "
             		+ ChatColor.RED + "/lottery buy "
@@ -128,7 +128,7 @@ public class MainCommandExecutor implements CommandExecutor {
             player.sendMessage(ChatColor.GOLD + "[LOTTERY] "
                     + ChatColor.WHITE + "あなたは "
                     + ChatColor.RED + lGame.playerInList((Player) sender)
-                    + " 枚の宝くじを買っています");
+                    + ChatColor.WHITE + " 枚の宝くじを買っています");
         }
         // Number of tickets available?
         if (lConfig.getTicketsAvailable() > 0) {
@@ -307,8 +307,11 @@ public class MainCommandExecutor implements CommandExecutor {
                 winnerArray.add(str);
             }
             in.close();
-        } catch (IOException e) {
-        }
+        } catch (IOException e) { }
+
+        // Send header
+        sender.sendMessage(ChatColor.GOLD + "[LOTTERY] " + ChatColor.WHITE + "過去の当選者リスト");
+
         String[] split;
         String winListPrice;
         for (int i = 0; i < winnerArray.size(); i++) {
@@ -321,8 +324,7 @@ public class MainCommandExecutor implements CommandExecutor {
                         + Etc.formatMaterialName(
                         Integer.parseInt(split[2])).toString();
             }
-            sender.sendMessage((i + 1) + ". " + split[0] + " "
-                    + winListPrice);
+            sender.sendMessage(ChatColor.GRAY + Integer.toString(i + 1) + ". " + ChatColor.WHITE + split[0] + ChatColor.GRAY + " (" + winListPrice + ")");
         }
     }
 

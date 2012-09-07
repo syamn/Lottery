@@ -93,12 +93,12 @@ public class Etc {
         if (timeLeft >= 60 * 60 * 24) {
             final int days = (int) Math.floor(timeLeft / (60 * 60 * 24));
             timeLeft -= 60 * 60 * 24 * days;
-            stringTimeLeft += Integer.toString(days) + "日 ";
+            stringTimeLeft += Integer.toString(days) + "日と";
         }
         if (timeLeft >= 60 * 60) {
             final int hours = (int) Math.floor(timeLeft / (60 * 60));
             timeLeft -= 60 * 60 * hours;
-            stringTimeLeft += Integer.toString(hours) + "時 ";
+            stringTimeLeft += Integer.toString(hours) + "時間 ";
         }
         if (timeLeft >= 60) {
             final int minutes = (int) Math.floor(timeLeft / (60));
